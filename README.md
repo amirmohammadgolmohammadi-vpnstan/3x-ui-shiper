@@ -1,37 +1,45 @@
-# 3x-ui Sanaei — Shiper deployment
+# 3x-ui Sanaei — Shiper
 
-This package is prepared for deployment on **Shiper** using a Dockerfile.
-Shiper officially supports custom Dockerfile deployments.
+این نسخه برای Deploy با Dockerfile روی Shiper آماده شده است.
 
-## Deploy on Shiper
+## Deploy
 
-1. Put these files in the root of a GitHub repository.
-2. In Shiper, create **Add Project**.
-3. Select **Dockerfile** as the deployment method.
-4. Keep the Dockerfile path as `Dockerfile`.
-5. Deploy the project.
-6. Configure the application's exposed/HTTP port as **2053** if Shiper asks for a port.
-7. Open the generated Shiper domain.
+1. این پوشه را در ریشه یک GitHub repository قرار دهید.
+2. در Shiper روی **Add Project** بزنید.
+3. روش Deploy را **Dockerfile** انتخاب کنید.
+4. در Advanced Settings:
+   - Dockerfile: `Dockerfile`
+   - Base path: ریشه repository
+5. Deploy را بزنید.
+6. اگر Shiper پورت برنامه را درخواست کرد، `2053` را به عنوان Target/HTTP Port قرار دهید.
+7. بعد از Deploy، برای پروژه Domain ایجاد کنید.
 
-## Panel version
+## نسخه پنل
 
-The Dockerfile uses:
+نسخه پیش‌فرض:
 
 `XUI_VERSION=v3.9.0`
 
-To change the release before building, change the `XUI_VERSION` build argument in the Dockerfile.
+در صورت نیاز می‌توانید `XUI_VERSION` را در Build Arguments به نسخه دیگری از Releaseهای رسمی 3x-ui تغییر دهید.
 
-## Important persistence note
+## نگهداری اطلاعات
 
-3x-ui stores its panel database/configuration on disk (commonly under `/etc/x-ui`).
-Whether that directory survives redeploys/restarts depends on the storage options available in the Shiper project/instance you use. If persistent storage is available for your deployment, mount it at:
+برای جلوگیری از از دست رفتن دیتابیس و تنظیمات هنگام recreate شدن کانتینر، در محیطی که Shiper اجازه Volume/Persistent Storage می‌دهد، مسیر زیر را به‌صورت persistent mount کنید:
 
 `/etc/x-ui`
 
-## Files
+همچنین لاگ‌ها در:
 
-- `Dockerfile` — Shiper-compatible container build
-- `README.md` — deployment instructions
-- `.dockerignore` — keeps the build context clean
+`/var/log/x-ui`
 
-The original panel source is not included in this archive because the uploaded archive itself only contained the Dockerfile and README; the Dockerfile downloads the selected Sanaei release during the image build.
+قرار می‌گیرند.
+
+## ساختار
+
+```text
+.
+├── Dockerfile
+└── README.md
+```
+
+این پروژه سورس کامل 3x-ui را داخل GitHub کپی نمی‌کند؛ Dockerfile در زمان Build، Release انتخاب‌شده را از GitHub رسمی mhsanaei/3x-ui دریافت می‌کند.
